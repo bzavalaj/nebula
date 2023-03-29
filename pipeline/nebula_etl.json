@@ -1,0 +1,139 @@
+{
+	"name": "nebula_etl",
+	"properties": {
+		"activities": [
+			{
+				"name": "bronze",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/nebula_etl/bronze"
+				},
+				"linkedServiceName": {
+					"referenceName": "nebuladatabrickscreaLS",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "silver",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "bronze",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/nebula_etl/silver"
+				},
+				"linkedServiceName": {
+					"referenceName": "nebuladatabrickscreaLS",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Notebook3",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "silver",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/nebula_etl/gold"
+				},
+				"linkedServiceName": {
+					"referenceName": "nebuladatabrickscreaLS",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Notebook3",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureDatabricksDeltaLakeSource",
+						"exportSettings": {
+							"type": "AzureDatabricksDeltaLakeExportCommand"
+						}
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "nebulaBlobStoragecreaLS",
+							"type": "LinkedServiceReference"
+						},
+						"path": "stage"
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "nebulaDatabricksDeltaLakeDataset",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Parquet1",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": []
+	}
+}
