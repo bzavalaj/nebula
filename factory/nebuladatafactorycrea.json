@@ -1,0 +1,9 @@
+{
+	"name": "nebuladatafactorycrea",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "3ca76590-e39a-47c4-8338-7affe372c5ff",
+		"tenantId": "63aef034-f273-4062-bf49-830d729c17b4"
+	}
+}
