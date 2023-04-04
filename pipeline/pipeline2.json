@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"notebookPath": "/nebula_etl/parametros",
 					"baseParameters": {
-						"otro": {
+						"input": {
 							"value": "@pipeline().parameters.prueba",
 							"type": "Expression"
 						}
