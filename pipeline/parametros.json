@@ -15,7 +15,13 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/nebula_etl/parametros"
+					"notebookPath": "/nebula_etl/parametros",
+					"baseParameters": {
+						"parametros": {
+							"value": "@pipeline().parameters.parametro",
+							"type": "Expression"
+						}
+					}
 				},
 				"linkedServiceName": {
 					"referenceName": "nebuladatabrickscreaLS",
