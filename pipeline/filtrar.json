@@ -1,0 +1,53 @@
+{
+	"name": "filtrar",
+	"properties": {
+		"activities": [
+			{
+				"name": "bronze_files",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/nebula_etl/bronze_files",
+					"baseParameters": {
+						"path": {
+							"value": "@pipeline().parameters.path",
+							"type": "Expression"
+						},
+						"file_name": {
+							"value": "@pipeline().parameters.file_name",
+							"type": "Expression"
+						},
+						"sas": {
+							"value": "@pipeline().parameters.sas",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "nebuladatabrickscreaLS",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"file_name": {
+				"type": "string"
+			},
+			"path": {
+				"type": "string"
+			},
+			"sas": {
+				"type": "string"
+			}
+		},
+		"annotations": []
+	}
+}
