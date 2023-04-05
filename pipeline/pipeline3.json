@@ -17,6 +17,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureMySqlSource",
+						"query": "SELECT * FROM hr3 WHERE DATE(DateofHire) BETWEEN  '2005-04-05' AND '2010-05-05';",
 						"queryTimeout": "02:00:00"
 					},
 					"sink": {
