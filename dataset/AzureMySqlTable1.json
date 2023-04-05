@@ -1,0 +1,220 @@
+{
+	"name": "AzureMySqlTable1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureMySql1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureMySqlTable",
+		"schema": [
+			{
+				"name": "Employee_Name",
+				"type": "text",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "EmpID",
+				"type": "int",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "MarriedID",
+				"type": "int",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "MaritalStatusID",
+				"type": "int",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "GenderID",
+				"type": "int",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "EmpStatusID",
+				"type": "int",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "DeptID",
+				"type": "int",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "PerfScoreID",
+				"type": "int",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "FromDiversityJobFairID",
+				"type": "int",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "Salary",
+				"type": "int",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "Termd",
+				"type": "int",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "PositionID",
+				"type": "int",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "Position",
+				"type": "text",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "State",
+				"type": "text",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "Zip",
+				"type": "int",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "DOB",
+				"type": "datetime",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "Sex",
+				"type": "text",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "MaritalDesc",
+				"type": "text",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "CitizenDesc",
+				"type": "text",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "HispanicLatino",
+				"type": "text",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "RaceDesc",
+				"type": "text",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "DateofHire",
+				"type": "datetime",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "EmploymentStatus",
+				"type": "text",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "Department",
+				"type": "text",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "ManagerName",
+				"type": "text",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "ManagerID",
+				"type": "double",
+				"precision": 0,
+				"scale": 31
+			},
+			{
+				"name": "RecruitmentSource",
+				"type": "text",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "PerformanceScore",
+				"type": "text",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "EngagementSurvey",
+				"type": "double",
+				"precision": 0,
+				"scale": 31
+			},
+			{
+				"name": "EmpSatisfaction",
+				"type": "int",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "SpecialProjectsCount",
+				"type": "int",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "LastPerformanceReview_Date",
+				"type": "datetime",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "DaysLateLast30",
+				"type": "int",
+				"precision": 0,
+				"scale": 0
+			},
+			{
+				"name": "Absences",
+				"type": "int",
+				"precision": 0,
+				"scale": 0
+			}
+		],
+		"typeProperties": {
+			"tableName": "hr3"
+		}
+	}
+}
