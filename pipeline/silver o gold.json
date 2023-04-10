@@ -9,7 +9,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@equals(pipeline().parameters.carga,'silver')",
+						"value": "@equals(pipeline().parameters.carga, 'silver')",
 						"type": "Expression"
 					},
 					"ifFalseActivities": [
