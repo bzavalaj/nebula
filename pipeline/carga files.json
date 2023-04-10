@@ -23,7 +23,13 @@
 									"referenceName": "silver o gold",
 									"type": "PipelineReference"
 								},
-								"waitOnCompletion": true
+								"waitOnCompletion": true,
+								"parameters": {
+									"carga": {
+										"value": "@pipeline().parameters.carga",
+										"type": "Expression"
+									}
+								}
 							}
 						}
 					],
