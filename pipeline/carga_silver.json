@@ -15,7 +15,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/nebula_etl/silver"
+					"notebookPath": "/nebula_etl/silver_files"
 				},
 				"linkedServiceName": {
 					"referenceName": "nebuladatabrickscreaLS",
