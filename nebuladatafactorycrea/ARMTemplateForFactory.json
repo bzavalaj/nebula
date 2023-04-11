@@ -7,6 +7,14 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "nebuladatafactorycrea"
 		},
+		"AzureBlobStorage1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
+		},
+		"AzureMySql1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureMySql1'"
+		},
 		"nebulaBlobStoragecreaLS_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'nebulaBlobStoragecreaLS'"
@@ -33,13 +41,85 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/pipeline2')]",
+			"name": "[concat(parameters('factoryName'), '/carga files')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "Notebook1",
+						"name": "If Condition1",
+						"type": "IfCondition",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@equals(pipeline().parameters.carga,'bronze')",
+								"type": "Expression"
+							},
+							"ifFalseActivities": [
+								{
+									"name": "carga silver o gold",
+									"type": "ExecutePipeline",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "silver o gold",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {
+											"carga": {
+												"value": "@pipeline().parameters.carga",
+												"type": "Expression"
+											}
+										}
+									}
+								}
+							],
+							"ifTrueActivities": [
+								{
+									"name": "carga bronze",
+									"type": "ExecutePipeline",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "carga_bronze",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {}
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"carga": {
+						"type": "string"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/silver o gold')]",
+				"[concat(variables('factoryId'), '/pipelines/carga_bronze')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/carga_bronze')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "bronze_files",
 						"type": "DatabricksNotebook",
 						"dependsOn": [],
 						"policy": {
@@ -51,10 +131,18 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"notebookPath": "/nebula_etl/parametros",
+							"notebookPath": "/nebula_etl/bronze_files",
 							"baseParameters": {
-								"input": {
-									"value": "@pipeline().parameters.prueba",
+								"path": {
+									"value": "@pipeline().parameters.path",
+									"type": "Expression"
+								},
+								"file_name": {
+									"value": "@pipeline().parameters.file_name",
+									"type": "Expression"
+								},
+								"sas": {
+									"value": "@pipeline().parameters.sas",
 									"type": "Expression"
 								}
 							}
@@ -70,7 +158,13 @@
 					"cancelAfter": {}
 				},
 				"parameters": {
-					"prueba": {
+					"file_name": {
+						"type": "string"
+					},
+					"path": {
+						"type": "string"
+					},
+					"sas": {
 						"type": "string"
 					}
 				},
@@ -78,6 +172,398 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/nebuladatabrickscreaLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/carga_gold')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "gold",
+						"type": "DatabricksNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/nebula_etl/gold_files"
+						},
+						"linkedServiceName": {
+							"referenceName": "nebuladatabrickscreaLS",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/nebuladatabrickscreaLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/carga_silver')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "silver",
+						"type": "DatabricksNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/nebula_etl/silver_files"
+						},
+						"linkedServiceName": {
+							"referenceName": "nebuladatabrickscreaLS",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/nebuladatabrickscreaLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/silver o gold')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "If Condition1",
+						"type": "IfCondition",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@equals(pipeline().parameters.carga, 'silver')",
+								"type": "Expression"
+							},
+							"ifFalseActivities": [
+								{
+									"name": "ejecutar gold",
+									"type": "ExecutePipeline",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "carga_gold",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {}
+									}
+								}
+							],
+							"ifTrueActivities": [
+								{
+									"name": "ejecutar silver",
+									"type": "ExecutePipeline",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"pipeline": {
+											"referenceName": "carga_silver",
+											"type": "PipelineReference"
+										},
+										"waitOnCompletion": true,
+										"parameters": {}
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"carga": {
+						"type": "string"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/carga_gold')]",
+				"[concat(variables('factoryId'), '/pipelines/carga_silver')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureMySqlTable1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureMySql1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureMySqlTable",
+				"schema": [
+					{
+						"name": "Employee_Name",
+						"type": "text",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "EmpID",
+						"type": "int",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "MarriedID",
+						"type": "int",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "MaritalStatusID",
+						"type": "int",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "GenderID",
+						"type": "int",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "EmpStatusID",
+						"type": "int",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "DeptID",
+						"type": "int",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "PerfScoreID",
+						"type": "int",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "FromDiversityJobFairID",
+						"type": "int",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "Salary",
+						"type": "int",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "Termd",
+						"type": "int",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "PositionID",
+						"type": "int",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "Position",
+						"type": "text",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "State",
+						"type": "text",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "Zip",
+						"type": "int",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "DOB",
+						"type": "datetime",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "Sex",
+						"type": "text",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "MaritalDesc",
+						"type": "text",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "CitizenDesc",
+						"type": "text",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "HispanicLatino",
+						"type": "text",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "RaceDesc",
+						"type": "text",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "DateofHire",
+						"type": "datetime",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "EmploymentStatus",
+						"type": "text",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "Department",
+						"type": "text",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "ManagerName",
+						"type": "text",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "ManagerID",
+						"type": "double",
+						"precision": 0,
+						"scale": 31
+					},
+					{
+						"name": "RecruitmentSource",
+						"type": "text",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "PerformanceScore",
+						"type": "text",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "EngagementSurvey",
+						"type": "double",
+						"precision": 0,
+						"scale": 31
+					},
+					{
+						"name": "EmpSatisfaction",
+						"type": "int",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "SpecialProjectsCount",
+						"type": "int",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "LastPerformanceReview_Date",
+						"type": "datetime",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "DaysLateLast30",
+						"type": "int",
+						"precision": 0,
+						"scale": 0
+					},
+					{
+						"name": "Absences",
+						"type": "int",
+						"precision": 0,
+						"scale": 0
+					}
+				],
+				"typeProperties": {
+					"tableName": "hr3"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureMySql1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "stage"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStorage1')]"
 			]
 		},
 		{
@@ -269,6 +755,32 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/nebulaDatabricksDeltaLakecreaLS')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobStorage1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureBlobStorage1_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureMySql1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureMySql",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureMySql1_connectionString')]"
+				}
+			},
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/nebulaBlobStoragecreaLS')]",

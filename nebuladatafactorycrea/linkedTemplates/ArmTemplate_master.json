@@ -7,6 +7,14 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "nebuladatafactorycrea"
 		},
+		"AzureBlobStorage1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
+		},
+		"AzureMySql1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureMySql1'"
+		},
 		"nebulaBlobStoragecreaLS_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'nebulaBlobStoragecreaLS'"
@@ -53,6 +61,12 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"AzureBlobStorage1_connectionString": {
+						"value": "[parameters('AzureBlobStorage1_connectionString')]"
+					},
+					"AzureMySql1_connectionString": {
+						"value": "[parameters('AzureMySql1_connectionString')]"
 					},
 					"nebulaBlobStoragecreaLS_connectionString": {
 						"value": "[parameters('nebulaBlobStoragecreaLS_connectionString')]"

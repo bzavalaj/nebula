@@ -5,6 +5,12 @@
 		"factoryName": {
 			"value": "nebuladatafactorycrea"
 		},
+		"AzureBlobStorage1_connectionString": {
+			"value": ""
+		},
+		"AzureMySql1_connectionString": {
+			"value": ""
+		},
 		"nebulaBlobStoragecreaLS_connectionString": {
 			"value": ""
 		},
