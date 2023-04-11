@@ -44,7 +44,13 @@
 									"referenceName": "carga_bronze",
 									"type": "PipelineReference"
 								},
-								"waitOnCompletion": true
+								"waitOnCompletion": true,
+								"parameters": {
+									"file_name": {
+										"value": "@pipeline().parameters.file_name",
+										"type": "Expression"
+									}
+								}
 							}
 						}
 					]
@@ -53,6 +59,9 @@
 		],
 		"parameters": {
 			"carga": {
+				"type": "string"
+			},
+			"file_name": {
 				"type": "string"
 			}
 		},
