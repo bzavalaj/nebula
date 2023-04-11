@@ -11,20 +11,8 @@
 		"AzureMySql1_connectionString": {
 			"value": ""
 		},
-		"nebulaBlobStoragecreaLS_connectionString": {
-			"value": ""
-		},
-		"nebulaDataLakegen2LS_accountKey": {
-			"value": ""
-		},
-		"nebulaDatabricksDeltaLakecreaLS_accessToken": {
-			"value": ""
-		},
 		"nebuladatabrickscreaLS_accessToken": {
 			"value": ""
-		},
-		"nebulaDataLakegen2LS_properties_typeProperties_url": {
-			"value": "https://storagesynapsecrea.dfs.core.windows.net/"
 		},
 		"containerUri": {
 			"value": ""
