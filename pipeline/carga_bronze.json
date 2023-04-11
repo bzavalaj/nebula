@@ -17,16 +17,8 @@
 				"typeProperties": {
 					"notebookPath": "/nebula_etl/bronze_files",
 					"baseParameters": {
-						"path": {
-							"value": "@pipeline().parameters.path",
-							"type": "Expression"
-						},
 						"file_name": {
 							"value": "@pipeline().parameters.file_name",
-							"type": "Expression"
-						},
-						"sas": {
-							"value": "@pipeline().parameters.sas",
 							"type": "Expression"
 						}
 					}
@@ -39,12 +31,6 @@
 		],
 		"parameters": {
 			"file_name": {
-				"type": "string"
-			},
-			"path": {
-				"type": "string"
-			},
-			"sas": {
 				"type": "string"
 			}
 		},
