@@ -7,14 +7,6 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "nebuladatafactorycrea"
 		},
-		"AzureBlobStorage1_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
-		},
-		"AzureMySql1_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'AzureMySql1'"
-		},
 		"nebuladatabrickscreaLS_accessToken": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accessToken' of 'nebuladatabrickscreaLS'"
@@ -45,12 +37,6 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
-					},
-					"AzureBlobStorage1_connectionString": {
-						"value": "[parameters('AzureBlobStorage1_connectionString')]"
-					},
-					"AzureMySql1_connectionString": {
-						"value": "[parameters('AzureMySql1_connectionString')]"
 					},
 					"nebuladatabrickscreaLS_accessToken": {
 						"value": "[parameters('nebuladatabrickscreaLS_accessToken')]"

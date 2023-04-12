@@ -7,14 +7,6 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "nebuladatafactorycrea"
 		},
-		"AzureBlobStorage1_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
-		},
-		"AzureMySql1_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'AzureMySql1'"
-		},
 		"nebuladatabrickscreaLS_accessToken": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accessToken' of 'nebuladatabrickscreaLS'"
@@ -73,7 +65,12 @@
 											"type": "PipelineReference"
 										},
 										"waitOnCompletion": true,
-										"parameters": {}
+										"parameters": {
+											"file_name": {
+												"value": "@pipeline().parameters.file_name",
+												"type": "Expression"
+											}
+										}
 									}
 								}
 							]
@@ -86,6 +83,9 @@
 				},
 				"parameters": {
 					"carga": {
+						"type": "string"
+					},
+					"file_name": {
 						"type": "string"
 					}
 				},
@@ -284,32 +284,6 @@
 				"[concat(variables('factoryId'), '/pipelines/carga_gold')]",
 				"[concat(variables('factoryId'), '/pipelines/carga_silver')]"
 			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/AzureBlobStorage1')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"connectionString": "[parameters('AzureBlobStorage1_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/AzureMySql1')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureMySql",
-				"typeProperties": {
-					"connectionString": "[parameters('AzureMySql1_connectionString')]"
-				}
-			},
-			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/nebuladatabrickscreaLS')]",
